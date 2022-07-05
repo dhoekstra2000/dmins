@@ -1,0 +1,85 @@
+\iffalse meta-comment
+
+ File: dmins.dtx
+
+Copyright (C) 2022 by Douwe Hoekstra <douwehoekstra2512@gmail.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Douwe Hoekstra.
+\fi
+
+\input l3docstrip.tex
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+dmins --- Douwe's notulenklasse
+E-mail: douwehoekstra2512@ygmail.com
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+\endpreamble
+\postamble
+Copyright (C) 2022 by Douwe Hoekstra <douwehoekstra2512@gmail.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Douwe Hoekstra.
+
+This work consists of the file  dmins.dtx
+and the derived files           dmemo.ins,
+                                dmins.cls,
+                                dmemo.pdf,
+                                action.lua and
+                                decision.lua.
+\endpostamble
+\usedir{tex/latex/dmins}
+\generate{\file{dmins.cls}{\from{dmins.dtx}{class}}}
+
+\def\MetaPrefix{--}
+\preamble
+----------------------------------------------------------------
+dmemo --- Douwe's notulenklasse
+E-mail: douwehoekstra2512@ygmail.com
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+\endpreamble
+\postamble
+Copyright (C) 2022 by Douwe Hoekstra <douwehoekstra2512@gmail.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Douwe Hoekstra.
+
+This work consists of the file  dmins.dtx
+                                dmins.ins
+and the derived files           dmemo.cls,
+                                dmemo.pdf,
+                                action.lua and
+                                decision.lua.
+\endpostamble
+
+\generate{
+    \file{action.lua}{\from{dmins.dtx}{action}}
+    \file{decision.lua}{\from{dmins.dtx}{decision}}
+}
+\endbatchfile
