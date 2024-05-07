@@ -1,0 +1,76 @@
+\documentclass[a4paper,11pt]{dmins}
+
+\usepackage{libertine}
+\usepackage[dutch]{babel}
+\usepackage{redact}
+\usepackage{import}
+\usepackage[hidelinks]{hyperref}
+\renewcommand\UrlFont{\rmfamily\itshape}
+\usepackage{emoji}
+\usepackage{tabularx}
+\usepackage{gensymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{ifthen}
+\usepackage{wasysym}
+
+% Personen
+\newcommand{\dvz}{\person{Gerald Arnold}\xspace}
+\newcommand{\dsc}{\person{Oscar Moos}\xspace}
+\newcommand{\dpm}{\person{Allard Isabelle}\xspace}
+\newcommand{\dct}{\person{Damiaan Mathijs}\xspace}
+\newcommand{\dcx}{\person{Lenn Ben}\xspace}
+
+% Correcte formatting voor Desda dingen
+\newcommand{\Desda}{\textsc{Desda}\xspace}
+\newcommand{\desda}{W.S.V. \textsc{Desda}\xspace}
+\newcommand{\app}{\textit{DesdApp}\xspace}
+\newcommand{\daily}{\textit{Desdaily}\xspace}
+\newcommand{\vb}{\textit{Volgens Bartjens}\xspace}
+
+% Voor als je lui bent en niks uit wil typen
+\newcommand{\bv}{bestuursvergadering\xspace}
+\newcommand{\alv}{algemene ledenvergadering\xspace}
+\newcommand{\Alv}{Algemene ledenvergadering\xspace}
+\newcommand{\cobo}{constitutieborrel\xspace}
+\newcommand{\cobos}{constitutieborrels\xspace}
+\newcommand{\cho}{commissiehoofdenoverleg\xspace}
+\newcommand{\rva}{Raad van Advies\xspace}
+\newcommand{\BBB}{BètaBedrijvenBeurs\xspace}
+\newcommand{\MM}{Monthly Meeting\xspace}
+\newcommand{\cncz}{C\&CZ\xspace}
+
+% Commissies
+\newcommand{\subcie}{Subculinairesubsubcommissie\xspace}
+\newcommand{\sjaarscie}{Eerstejaarscie\xspace}
+
+% Overig
+\newcommand{\een}{\'{e}\'{e}n\xspace}
+
+\input{namen.tex}
+
+\begin{document}
+\logo{logo.pdf}
+\titel{Notulen van de bestuursvergaderingen}
+\ondertitel{Van het 56e bestuur (2023--2024)}
+\organisatie{\textsc{W.S.V. Desda}}
+\vergadering{bestuursvergadering}
+\leden{Gerald~Arnold,Oscar~Moos,Allard~Isabelle,Damiaan~Matthijs,Lenn~Ben}
+\functie{Gerald~Arnold}{Voorzitter}
+\functie{Oscar~Moos}{Secretaris}
+\functie{Allard~Isabelle}{Penningmeester}
+\functie{Damiaan~Mathijs}{Commissaris interne betrekkingen}
+\functie{Lenn~Ben}{Commissaris externe betrekkingen}
+\voorzitter{Gerald~Arnold}
+\notulist{Oscar~Moos}
+
+\maketitle
+\listofnotulen
+\clearpage
+
+\import{notulen/}{01_notulen_bv.tex}
+
+\besluitenlijst
+
+\end{document}

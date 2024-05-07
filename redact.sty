@@ -1,0 +1,181 @@
+%%
+%% This is file `redact.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% redact.dtx  (with options: `package')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright (C) 2021 by Douwe Hoekstra
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.3c of this license or (at your opinion) any later
+%% version. The latest version of this license is in:
+%% 
+%%     http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3c or later is part of all distributions of
+%% LaTeX version 2008/05/04 or later.
+%% 
+%% This work has the LPPL maintenance status "maintained"
+%% 
+%% The Current Maintainer of this work is Douwe Hoekstra <douwe@355524.xyz>
+%% 
+\RequirePackage{expl3}
+\@ifpackagelater {expl3}{2021-02-18}
+  {}
+  {%
+    \PackageError {redact} {Support package expl3 too old}
+      {%
+        You need to update your installation of the bundles 'l3kernel' and
+        'l3packages'.\MessageBreak
+        Loading~redact~will~abort!%
+      }%
+    \endinput
+  }%
+\ProvidesExplPackage {redact} {2021/12/28} {0.2.0}
+  {Package for redacting names from confidential documents}
+\prop_new:N \g__redact_entity_prop
+\prop_new:N \g__redact_entitytype_prop
+\prop_new:N \g__redact_entitycounters_prop
+\bool_new:N \g__redact_active_bool
+\bool_new:N \g__redact_blackout_bool
+\bool_new:N \g__redact_typeonly_bool
+\cs_new_protected:Npn \__redact_newentity:nn #1#2 {
+    \prop_if_in:NnTF \g__redact_entitycounters_prop {#1} {
+        \prop_put:Nnx \g__redact_entitycounters_prop {#1}
+            {\int_eval:n
+                 {\prop_item:Nn \g__redact_entitycounters_prop{#1} + 1}}
+    } {
+        \prop_put:Nnn \g__redact_entitycounters_prop {#1} {1}
+    }
+    \prop_get:NnNF \g__redact_entity_prop {#1} \l_tmpa_prop {
+        \prop_clear:N \l_tmpa_prop
+    }
+    \prop_if_in:NnF \l_tmpa_prop {#2}
+         {\prop_put:Nnx \l_tmpa_prop {#2}
+              {#1\nobreakspace
+                   {\prop_item:Nn \g__redact_entitycounters_prop {#1}}}}
+    \prop_put_if_new:Nnn \g__redact_entitytype_prop {#2} {#1}
+    \prop_put:NnV \g__redact_entity_prop {#1} \l_tmpa_prop
+}
+\cs_new_protected:Npn \__redact_newperson:n #1 {
+    \__redact_newentity:nn {persoon} {#1}
+}
+\cs_new:Npn \__redact_get_entity_type:nN #1#2 {
+    \prop_get:NnN \g__redact_entitytype_prop {#1} #2
+}
+\cs_new_protected:Npn \__redact_replace_entity:nn #1#2 {
+    \bool_if:nTF {\g__redact_active_bool} {
+        \prop_get:NnNTF \g__redact_entity_prop {#1} \l_tmpa_prop {
+            \prop_get:NnNTF \l_tmpa_prop {#2} \l_tmpa_tl {
+                \bool_if:nT {\g__redact_typeonly_bool}
+                    {\tl_set:Nn \l_tmpa_tl {#1}}
+                \bool_if:nTF {\g__redact_blackout_bool}
+                    {\__redact_blackout_word:n {<\tl_use:N \l_tmpa_tl>}}
+                    {<\tl_use:N \l_tmpa_tl>}
+            } {
+                \__redact_newentity:nn {#1} {#2}
+                \__redact_replace_entity:nn {#1} {#2}
+            }
+        } {
+            \__redact_newentity:nn {#1} {#2}
+            \__redact_replace_entity:nn {#1} {#2}
+        }
+    } {
+        #2
+    }
+}
+\cs_generate_variant:Nn \__redact_replace_entity:nn {Vn}
+
+\cs_new_protected:Npn \__redact_replace_entity:n #1 {
+    \__redact_get_entity_type:nN {#1} \l_tmpb_tl
+    \tl_if_eq:NNT \l_tmpb_tl \q_no_value
+        {\msg_fatal:nnn {redact} {unknown entity} {#1}}
+    \__redact_replace_entity:Vn \l_tmpb_tl {#1}
+}
+\cs_new_protected:Npn \__redact_replace_person:n #1 {
+    \__redact_replace_entity:nn {persoon} {#1}
+}
+\cs_new_protected:Npn \__redact_blackout_word:n #1 {
+    \hbox_set:Nn \l_tmpa_box {#1}
+    \dim_set:Nn \l_tmpa_dim {\box_wd:N \l_tmpa_box}
+    \rule[-0.3ex]{\l_tmpa_dim}{2.1ex}
+}
+\msg_new:nnnn {redact}
+    {unknown entity}
+    {Unknown~entity:~#1}
+    {The~entity~`#1'~is~unknown.\\Did~you~declare~it~using~\newentity\{type\}\{#1\}}
+\prop_new:N \g__redact_pronoun_prop
+\prop_set_from_keyval:Nn \g__redact_pronoun_prop {
+    hij = {hij/zij},
+    ze = {hij/zij},
+    zij = {hij/zij},
+    hem = {hem/haar},
+    haar = {hem/haar},
+    he = {he/she},
+    she = {he/she},
+    him = {him/her},
+    her = {him/her}
+}
+
+\prop_new:N \g__redact_poss_prop
+\prop_set_from_keyval:Nn \g__redact_poss_prop {
+    zijn = {zijn/haar},
+    haar = {zijn/haar},
+    his = {his/her},
+    her = {his/her}
+}
+\cs_new_protected:Npn \__redact_replace_pronoun:n #1 {
+    \bool_if:nTF {\g__redact_active_bool} {
+        \prop_get:NnNTF \g__redact_pronoun_prop {#1} \l_tmpa_tl {
+            \l_tmpa_tl
+        } {
+            #1
+        }
+    } {
+        #1
+    }
+}
+
+\cs_new_protected:Npn \__redact_replace_possessive:n #1 {
+    \bool_if:nTF {\g__redact_active_bool} {
+        \prop_get:NnNTF \g__redact_poss_prop {#1} \l_tmpa_tl {
+            \l_tmpa_tl
+        } {
+            #1
+        }
+    } {
+        #1
+    }
+}
+\NewDocumentCommand{\newentity}{m m}{\__redact_newentity:nn {#1} {#2}}
+\NewDocumentCommand{\newperson}{m}{\__redact_newperson:n {#1}}
+\NewDocumentCommand{\entity}{o m}{
+  \IfValueTF{#1}
+    {\__redact_replace_entity:nn {#1} {#2}}
+    {\__redact_replace_entity:n {#2}}}
+\NewDocumentCommand{\person}{m}{\__redact_replace_person:n {#1}}
+\NewDocumentCommand{\pn}{m}{\__redact_replace_pronoun:n {#1}}
+\NewDocumentCommand{\poss}{m}{\__redact_replace_possessive:n {#1}}
+\NewDocumentCommand{\Redact}{}{\bool_gset_true:N \g__redact_active_bool}
+\NewDocumentCommand{\NoRedact}{}{\bool_gset_false:N \g__redact_active_bool}
+\NewDocumentCommand{\StartBlackout}{}{\bool_gset_true:N \g__redact_blackout_bool}
+\NewDocumentCommand{\StopBlackout}{}{\bool_gset_false:N \g__redact_blackout_bool}
+\NewDocumentCommand{\TypeOnly}{}{\bool_gset_true:N \g__redact_typeonly_bool}
+\NewDocumentCommand{\NoTypeOnly}{}{\bool_gset_false:N \g__redact_typeonly_bool}
+\NewDocumentEnvironment{typeonly}{+b}{
+    \bool_if:NTF \g__redact_typeonly_bool {#1} {
+    \TypeOnly{}
+    {#1}
+    \NoTypeOnly{}
+    }
+} {}
+%% 
+%% This work consists of the files redact.ins, redact.dtx, README.md, and CHANGELOG.md
+%% and the derived file redact.sty
+%%
+%% End of file `redact.sty'.
